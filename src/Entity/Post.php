@@ -12,7 +12,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
 normalizationContext:['groups'=>['read:collection']],
-itemOperations: ['get'=>[
+itemOperations: [
+    'put',
+    'delete',
+    'get'=>[
     'normalization_context'=>['groups'=>['read:collection','read:item','read:post']]
     ]]
 )]
