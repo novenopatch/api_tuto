@@ -13,7 +13,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
 normalizationContext:['groups'=>['read:collection']],
 itemOperations: [
-    'put',
+    'put'=>[
+        'denormalization_context'=>['groups'=>['put:Post']]
+    ],
     'delete',
     'get'=>[
     'normalization_context'=>['groups'=>['read:collection','read:item','read:post']]
@@ -28,7 +30,7 @@ class Post
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('read:collection')]
+    #[Groups(['read:collection','put:Post'])]
     private $title;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -48,7 +50,7 @@ class Post
     private $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
-    #[Groups('read:item')]
+    #[Groups(['read:item','put:Post'])]
     private $category;
 
 
