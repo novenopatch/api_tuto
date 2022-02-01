@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
 normalizationContext:['groups'=>['read:collection']],
 itemOperations: ['get'=>[
-    'normalization_context'=>['groups'=>['read:collection','read:item']]
+    'normalization_context'=>['groups'=>['read:collection','read:item','read:post']]
     ]]
 )]
 class Post
