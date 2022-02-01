@@ -12,13 +12,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
 normalizationContext:['groups'=>['read:collection']],
+    denormalizationContext:['groups'=>['write:Post']],
 itemOperations: [
     'put'=>[
-        'denormalization_context'=>['groups'=>['put:Post']]
+        'denormalization_context'=>['groups'=>[]]
     ],
     'delete',
     'get'=>[
-    'normalization_context'=>['groups'=>['read:collection','read:item','read:post']]
+    'normalization_context'=>['groups'=>['read:collection','read:item','write:post']]
     ]]
 )]
 class Post
@@ -30,27 +31,27 @@ class Post
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['read:collection','put:Post'])]
+    #[Groups(['read:collection','write:Post'])]
     private $title;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('read:collection')]
+    #[Groups(['read:collection','write:Post'])]
     private $slug;
 
     #[ORM\Column(type: 'text')]
-    #[Groups('read:item')]
+    #[Groups(['read:item','write:Post'])]
     private $content;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups('read:item')]
+    #[Groups(['read:item'])]
     private $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups('read:item')]
+    #[Groups(['read:item','write:Post'])]
     private $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
-    #[Groups(['read:item','put:Post'])]
+    #[Groups(['read:item','write:Post'])]
     private $category;
 
 
