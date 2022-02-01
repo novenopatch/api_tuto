@@ -8,15 +8,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
+    attributes:[
+        'validation_groups'=>['create:post']
+    ],
 normalizationContext:['groups'=>['read:collection']],
     denormalizationContext:['groups'=>['write:Post']],
 itemOperations: [
-    'put'=>[
-        'denormalization_context'=>['groups'=>[]]
-    ],
+    'put',
     'delete',
     'get'=>[
     'normalization_context'=>['groups'=>['read:collection','read:item','write:post']]
@@ -31,11 +33,16 @@ class Post
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['read:collection','write:Post'])]
+    #[
+        Groups(['read:collection','write:Post']),
+        Length(min: 5,groups: ['create:post'])
+    ]
     private $title;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['read:collection','write:Post'])]
+    #[Groups(
+        ['read:collection','write:Post'])
+    ]
     private $slug;
 
     #[ORM\Column(type: 'text')]
