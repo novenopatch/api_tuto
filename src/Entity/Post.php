@@ -12,11 +12,14 @@ use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
-    attributes:[
-        'validation_groups'=>['create:post']
-    ],
 normalizationContext:['groups'=>['read:collection']],
     denormalizationContext:['groups'=>['write:Post']],
+collectionOperations:[
+    'get',
+    'post'=>[
+        'validation_groups'=>['create:post']
+    ]
+    ],
 itemOperations: [
     'put',
     'delete',
