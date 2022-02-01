@@ -17,7 +17,7 @@ normalizationContext:['groups'=>['read:collection']],
 collectionOperations:[
     'get',
     'post'=>[
-        'validation_groups'=>['create:post']
+        'validation_groups'=>[Post::class,'validationGroups']
     ]
     ],
 itemOperations: [
@@ -65,7 +65,14 @@ class Post
     private $category;
 
 
-
+    /**
+     * method statique pour gerer la validation
+     * @param Post $post
+     * @return string[]
+     */
+    public static function validationGroups(self $post){
+        return ['create:post'];
+    }
     public function __construct()
     {
         $this->posts = new ArrayCollection();
