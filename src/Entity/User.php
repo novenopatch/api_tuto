@@ -13,14 +13,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
+    security: 'is_granted("ROLE_USER")',
     collectionOperations: [
         'me'=>[
             'pagination_enable'=>false,
             'path'=>'/me',
             'method' => 'get',
             'controller' => MeController::class,
-            'read'=>false,
-            'security'=>'is_granted("ROLE_USER")'
+            'read'=>false
         ]
     ],itemOperations: [
         'get'=>[
