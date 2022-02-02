@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +14,9 @@ use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ApiResource(
+    paginationClientItemsPerPage: true,
+paginationMaximumItemsPerPage: 24,
+paginationItemsPerPage: 24,
 normalizationContext:['groups'=>['read:collection']],
     denormalizationContext:['groups'=>['write:Post']],
 collectionOperations:[
@@ -26,7 +31,8 @@ itemOperations: [
     'get'=>[
     'normalization_context'=>['groups'=>['read:collection','read:item','write:post']]
     ]]
-)]
+),
+ApiFilter(  SearchFilter::class,properties: ['id'=>'exact','title'=>'partial'])]
 class Post
 {
     #[ORM\Id]
