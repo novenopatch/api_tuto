@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\PostRepository;
+use App\Utils\UserOwenedInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,7 +21,12 @@ paginationItemsPerPage: 24,
 normalizationContext:['groups'=>['read:collection']],
     denormalizationContext:['groups'=>['write:Post']],
 collectionOperations:[
-    'get',
+    'get'=>[
+
+        'openapi_context'=> [
+            'security'=>[['bearerAuth'=>[]]]
+        ]
+    ],
     'post'=>[
         'validation_groups'=>[Post::class,'validationGroups']
     ]
@@ -29,11 +35,14 @@ itemOperations: [
     'put',
     'delete',
     'get'=>[
+        'openapi_context'=> [
+            'security'=>[['bearerAuth'=>[]]]
+        ],
     'normalization_context'=>['groups'=>['read:collection','read:item','write:post']]
     ]]
 ),
 ApiFilter(  SearchFilter::class,properties: ['id'=>'exact','title'=>'partial'])]
-class Post
+class Post implements UserOwenedInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -69,6 +78,9 @@ class Post
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
     #[Groups(['read:item','write:Post'])]
     private $category;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
+    private $user;
 
 
     /**
@@ -157,6 +169,18 @@ class Post
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
