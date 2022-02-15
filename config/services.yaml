@@ -24,9 +24,9 @@ services:
     #    arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
     #    autoconfigure: false
 
-    App\Serializer\PostContextBuilder:
-        decorates: 'api_platform.serializer.context_builder'
-        autoconfigure: false
+    #App\Serializer\PostContextBuilder:
+    #    decorates: 'api_platform.serializer.context_builder'
+    #    autoconfigure: false
 
 
     # add more service definitions when explicit configuration is needed

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\PostImageController;
 use App\Repository\PostRepository;
 use App\Utils\UserOwenedInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,7 +40,14 @@ itemOperations: [
             'security'=>[['bearerAuth'=>[]]]
         ],
     'normalization_context'=>['groups'=>['read:collection','read:item','write:post']]
-    ]]
+    ],
+        'image'=>[
+            'method'=>'POST',
+            'path'=>'/posts/{id}/image',
+            'deserialize'=>false,
+            'controller'=>PostImageController::class
+        ]
+    ]
 ),
 ApiFilter(  SearchFilter::class,properties: ['id'=>'exact','title'=>'partial'])]
 class Post implements UserOwenedInterface
